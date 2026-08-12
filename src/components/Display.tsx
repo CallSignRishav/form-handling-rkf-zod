@@ -1,19 +1,27 @@
-import { formSchemaType, FormType } from "@/utils/types";
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@nextui-org/button";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
-import { Divider } from "@nextui-org/divider";
-import { Input } from "@nextui-org/input";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { formSchemaType, type FormType } from "@/utils/types";
 
 const Display = () => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { isValid, isLoading, errors },
-  } = useForm<FormType>({
+  const form = useForm<FormType>({
     resolver: zodResolver(formSchemaType),
+    defaultValues: {
+      username: "",
+      useremail: "",
+      userage: undefined,
+    },
     mode: "all",
   });
 
@@ -22,54 +30,86 @@ const Display = () => {
   };
 
   return (
-    <>
-      <Card className="w-[400px]">
-        <CardHeader className="flex items-center justify-center text-3xl font-bold">
+    <Card className="w-[400px]">
+      <CardHeader>
+        <CardTitle className="text-center text-3xl font-bold">
           Registration Form
-        </CardHeader>
+        </CardTitle>
+      </CardHeader>
 
-        <Divider />
+      <CardContent>
+        <form onSubmit={form.handleSubmit(submitFormFn)} noValidate>
+          <FieldGroup>
+            <Controller
+              name="username"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Name</FieldLabel>
 
-        <form onSubmit={handleSubmit(submitFormFn)} noValidate>
-          <CardBody className="space-y-4">
-            <Input
-              isRequired
-              color={isValid ? "success" : "primary"}
-              variant="underlined"
-              label="Name"
-              {...register("username")}
-              isInvalid={errors.username?.message ? true : false}
-              errorMessage={errors.username?.message}
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                  />
+
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
 
-            <Input
-              isRequired
-              color={isValid ? "success" : "primary"}
-              variant="underlined"
-              label="Email"
-              {...register("useremail")}
-              isInvalid={errors.useremail?.message ? true : false}
-              errorMessage={errors.useremail?.message}
+            <Controller
+              name="useremail"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+
+                  <Input
+                    {...field}
+                    id={field.name}
+                    type="email"
+                    aria-invalid={fieldState.invalid}
+                  />
+
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
 
-            <Input
-              isRequired
-              type="number"
-              color={isValid ? "success" : "primary"}
-              variant="underlined"
-              label="Age"
-              {...register("userage")}
-              isInvalid={errors.userage?.message ? true : false}
-              errorMessage={errors.userage?.message}
+            <Controller
+              name="userage"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Age</FieldLabel>
+
+                  <Input
+                    {...field}
+                    value={field.value ?? ""}
+                    id={field.name}
+                    type="number"
+                    aria-invalid={fieldState.invalid}
+                  />
+
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
 
-            <Button type="submit" color="success" variant="shadow" size="lg">
+            <Button type="submit" className="w-full">
               Submit
             </Button>
-          </CardBody>
+          </FieldGroup>
         </form>
-      </Card>
-    </>
+      </CardContent>
+    </Card>
   );
 };
 
