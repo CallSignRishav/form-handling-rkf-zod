@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { formSchemaType, type FormType } from "@/utils/types";
+import { toast } from "./ui/toast";
 
 const Display = () => {
   const form = useForm<FormType>({
@@ -25,12 +26,22 @@ const Display = () => {
     mode: "all",
   });
 
-  const submitFormFn = (fData: FormType) => {
+  const submitFormFn = async (fData: FormType) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     console.log(fData);
+
+    form.reset();
+
+    toast.add({
+      title: "Form submitted",
+      description: "Form submitted successfully",
+      type: "success",
+    });
   };
 
   return (
-    <Card className="w-[400px]">
+    <Card className="w-100">
       <CardHeader>
         <CardTitle className="text-center text-3xl font-bold">
           Registration Form
@@ -103,8 +114,13 @@ const Display = () => {
               )}
             />
 
-            <Button type="submit" className="w-full">
-              Submit
+            <Button
+              size={"lg"}
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "Submitting..." : "Submit Form"}
             </Button>
           </FieldGroup>
         </form>

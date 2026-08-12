@@ -1,9 +1,14 @@
-import type { Metadata } from "next";
-import "@/styles/globals.css";
-import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import "@/styles/globals.css";
+import type { Metadata } from "next";
+import { Geist } from "next/font/google";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+import Header from "@/components/Header";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toast";
+import { ReactNode } from "react";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Form Handling",
@@ -13,11 +18,28 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("dark", "font-sans", geist.variable)}>
-      <body>{children}</body>
+    <html
+      lang="en"
+      className={cn("font-sans", geist.variable)}
+      suppressHydrationWarning
+    >
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Header />
+
+          <main>{children}</main>
+
+          <Toaster />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
