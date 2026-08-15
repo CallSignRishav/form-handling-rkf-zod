@@ -5,7 +5,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Header() {
   return (
-    <header className="bg-background/80 sticky top-0 z-50 border-b backdrop-blur">
+    <header className="bg-background/80 fixed inset-x-0 top-0 z-50 border-b backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
         <Link
           href="/"

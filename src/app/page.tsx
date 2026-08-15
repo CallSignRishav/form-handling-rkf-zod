@@ -1,10 +1,10 @@
-import Display from "@/components/Display";
+import FormsTabs from "@/components/FormsTabs";
 
 export default function Home() {
   return (
-    <section className="px-5">
-      <div className="mx-auto flex min-h-dvh max-w-7xl items-start justify-center pt-16">
-        <Display />
+    <section className="px-4 sm:px-6">
+      <div className="mx-auto w-full max-w-md pt-16 sm:pt-20">
+        <FormsTabs />
       </div>
     </section>
   );

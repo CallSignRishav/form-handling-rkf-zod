@@ -1,0 +1,115 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+
+import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { formSchemaType, type FormType } from "@/utils/types";
+import { toast } from "./ui/toast";
+
+const RegisterForm = () => {
+  const form = useForm<FormType>({
+    resolver: zodResolver(formSchemaType),
+    defaultValues: {
+      username: "",
+      useremail: "",
+      userage: undefined,
+    },
+    mode: "all",
+  });
+
+  const submitFormFn = async (fData: FormType) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    console.log(fData);
+
+    form.reset();
+
+    toast.add({
+      title: "Form submitted",
+      description: "Form submitted successfully",
+      type: "success",
+    });
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(submitFormFn)} noValidate>
+      <FieldGroup>
+        <Controller
+          name="username"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+
+              <Input
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          name="useremail"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+
+              <Input
+                {...field}
+                id={field.name}
+                type="email"
+                aria-invalid={fieldState.invalid}
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          name="userage"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Age</FieldLabel>
+
+              <Input
+                {...field}
+                value={field.value ?? ""}
+                id={field.name}
+                type="number"
+                aria-invalid={fieldState.invalid}
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Button
+          size={"lg"}
+          type="submit"
+          className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-sm hover:from-blue-600 hover:to-cyan-600 focus-visible:ring-blue-500/40"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? "Submitting..." : "Submit Form"}
+        </Button>
+      </FieldGroup>
+    </form>
+  );
+};
+
+export default RegisterForm;
