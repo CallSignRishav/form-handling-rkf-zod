@@ -10,20 +10,24 @@ const FormsTabs = () => {
   return (
     <Tabs defaultValue="register" className="w-full">
       <TabsList variant="line" className="w-full">
+        {/* Trigger */}
         <TabsTrigger value="register" className="data-active:after:bg-blue-500">
           <UserRoundPlus />
           Register
         </TabsTrigger>
+
         <TabsTrigger value="login" className="data-active:after:bg-blue-500">
           <LogIn />
           Login
         </TabsTrigger>
+
         <TabsTrigger value="contact" className="data-active:after:bg-blue-500">
           <MessageSquare />
           Contact
         </TabsTrigger>
       </TabsList>
 
+      {/* Register form */}
       <TabsContent value="register" className="pt-10">
         <div className="mb-8">
           <h2 className="text-2xl font-bold tracking-tight">
@@ -37,6 +41,7 @@ const FormsTabs = () => {
         <RegisterForm />
       </TabsContent>
 
+      {/* Login form */}
       <TabsContent value="login" className="pt-10">
         <div className="mb-8">
           <h2 className="text-2xl font-bold tracking-tight">Welcome back</h2>
@@ -51,6 +56,7 @@ const FormsTabs = () => {
         />
       </TabsContent>
 
+      {/* Contact form */}
       <TabsContent value="contact" className="pt-10">
         <div className="mb-8">
           <h2 className="text-2xl font-bold tracking-tight">Get in touch</h2>
