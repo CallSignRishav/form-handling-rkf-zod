@@ -1,13 +1,20 @@
 import { z } from "zod";
 
 export const formSchemaType = z.object({
-  username: z
+  fullname: z
     .string()
     .min(3, { message: "Min 3 required" })
     .max(25, { message: "Max 25" }),
-  useremail: z.string().email({ message: "Valid email required" }),
-  userage: z.coerce.number().gte(18, { message: "Must be 18+" }).lt(100, {
-    message: "Must be less than 100",
+  password: z
+    .string()
+    .min(8, { message: "Min 8 required" })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])/, {
+      message: "Must include uppercase, lowercase, number, and special char",
+    }),
+  email: z.string().email({ message: "Valid email required" }),
+  mobile: z.string().regex(/^\d{10}$/, { message: "Must be 10 digits" }),
+  confirm: z.boolean().refine((v) => v === true, {
+    message: "You must confirm the details are correct",
   }),
 });
 
