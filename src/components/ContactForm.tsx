@@ -1,13 +1,9 @@
 "use client";
 
-import { useState } from "react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldError,
@@ -15,26 +11,25 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { formSchemaType, type FormType } from "@/utils/types";
+import { Textarea } from "@/components/ui/textarea";
+import { contactSchema, type ContactType } from "@/utils/types";
 import { Spinner } from "./ui/spinner";
 import { toast } from "./ui/toast";
 
-const RegisterForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const form = useForm<FormType>({
-    resolver: zodResolver(formSchemaType),
+const ContactForm = () => {
+  const form = useForm<ContactType>({
+    resolver: zodResolver(contactSchema),
     defaultValues: {
-      fullname: "",
-      password: "",
+      name: "",
       email: "",
-      mobile: "",
-      confirm: false,
+      phone: "",
+      subject: "",
+      message: "",
     },
     mode: "onSubmit",
   });
 
-  const submitFormFn = async (fData: FormType) => {
+  const submitFormFn = async (fData: ContactType) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     console.log(fData);
@@ -42,8 +37,8 @@ const RegisterForm = () => {
     form.reset();
 
     toast.add({
-      title: "Form submitted",
-      description: "Form submitted successfully",
+      title: "Message sent",
+      description: "We'll get back to you soon",
       type: "success",
     });
   };
@@ -55,55 +50,19 @@ const RegisterForm = () => {
   return (
     <form onSubmit={form.handleSubmit(submitFormFn)} noValidate>
       <FieldGroup>
-        {/* Full Name */}
+        {/* Name */}
         <Controller
-          name="fullname"
+          name="name"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Fullname</FieldLabel>
+              <FieldLabel htmlFor={field.name}>Name</FieldLabel>
 
               <Input
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}
               />
-
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-
-        {/* Password */}
-        <Controller
-          name="password"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-
-              <div className="relative">
-                <Input
-                  {...field}
-                  id={field.name}
-                  type={showPassword ? "text" : "password"}
-                  className="pr-9"
-                  aria-invalid={fieldState.invalid}
-                />
-
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="text-muted-foreground hover:text-foreground focus-visible:text-foreground absolute inset-y-0 right-0 flex w-9 items-center justify-center outline-none"
-                >
-                  {showPassword ? (
-                    <EyeOff className="size-4" />
-                  ) : (
-                    <Eye className="size-4" />
-                  )}
-                </button>
-              </div>
 
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -130,13 +89,13 @@ const RegisterForm = () => {
           )}
         />
 
-        {/* Mobile */}
+        {/* Phone */}
         <Controller
-          name="mobile"
+          name="phone"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Mobile</FieldLabel>
+              <FieldLabel htmlFor={field.name}>Phone</FieldLabel>
 
               <Input
                 {...field}
@@ -151,28 +110,42 @@ const RegisterForm = () => {
           )}
         />
 
-        {/* Confirm */}
+        {/* Subject */}
         <Controller
-          name="confirm"
+          name="subject"
           control={form.control}
           render={({ field, fieldState }) => (
-            <div className="flex flex-col gap-1">
-              <Field orientation="horizontal" data-invalid={fieldState.invalid}>
-                <Checkbox
-                  id={field.name}
-                  name={field.name}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  aria-invalid={fieldState.invalid}
-                />
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Subject</FieldLabel>
 
-                <FieldLabel htmlFor={field.name} className="font-normal">
-                  I confirm the details are correct
-                </FieldLabel>
-              </Field>
+              <Input
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+              />
 
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </div>
+            </Field>
+          )}
+        />
+
+        {/* Message */}
+        <Controller
+          name="message"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Message</FieldLabel>
+
+              <Textarea
+                {...field}
+                id={field.name}
+                rows={5}
+                aria-invalid={fieldState.invalid}
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
           )}
         />
 
@@ -183,7 +156,7 @@ const RegisterForm = () => {
             className="flex-1"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? <Spinner /> : "Submit Form"}
+            {form.formState.isSubmitting ? <Spinner /> : "Send Message"}
           </Button>
 
           <Button
@@ -202,4 +175,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default ContactForm;

@@ -7,7 +7,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldError,
@@ -15,26 +14,23 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { formSchemaType, type FormType } from "@/utils/types";
+import { loginSchema, type LoginType } from "@/utils/types";
 import { Spinner } from "./ui/spinner";
 import { toast } from "./ui/toast";
 
-const RegisterForm = () => {
+const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const form = useForm<FormType>({
-    resolver: zodResolver(formSchemaType),
+  const form = useForm<LoginType>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      fullname: "",
-      password: "",
       email: "",
-      mobile: "",
-      confirm: false,
+      password: "",
     },
     mode: "onSubmit",
   });
 
-  const submitFormFn = async (fData: FormType) => {
+  const submitFormFn = async (fData: LoginType) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     console.log(fData);
@@ -42,8 +38,8 @@ const RegisterForm = () => {
     form.reset();
 
     toast.add({
-      title: "Form submitted",
-      description: "Form submitted successfully",
+      title: "Logged in",
+      description: "You have been logged in successfully",
       type: "success",
     });
   };
@@ -55,17 +51,18 @@ const RegisterForm = () => {
   return (
     <form onSubmit={form.handleSubmit(submitFormFn)} noValidate>
       <FieldGroup>
-        {/* Full Name */}
+        {/* Email */}
         <Controller
-          name="fullname"
+          name="email"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Fullname</FieldLabel>
+              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
 
               <Input
                 {...field}
                 id={field.name}
+                type="email"
                 aria-invalid={fieldState.invalid}
               />
 
@@ -110,72 +107,6 @@ const RegisterForm = () => {
           )}
         />
 
-        {/* Email */}
-        <Controller
-          name="email"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-
-              <Input
-                {...field}
-                id={field.name}
-                type="email"
-                aria-invalid={fieldState.invalid}
-              />
-
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-
-        {/* Mobile */}
-        <Controller
-          name="mobile"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Mobile</FieldLabel>
-
-              <Input
-                {...field}
-                id={field.name}
-                type="tel"
-                inputMode="numeric"
-                aria-invalid={fieldState.invalid}
-              />
-
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-
-        {/* Confirm */}
-        <Controller
-          name="confirm"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <div className="flex flex-col gap-1">
-              <Field orientation="horizontal" data-invalid={fieldState.invalid}>
-                <Checkbox
-                  id={field.name}
-                  name={field.name}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                  aria-invalid={fieldState.invalid}
-                />
-
-                <FieldLabel htmlFor={field.name} className="font-normal">
-                  I confirm the details are correct
-                </FieldLabel>
-              </Field>
-
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </div>
-          )}
-        />
-
         <div className="flex gap-3">
           <Button
             size={"lg"}
@@ -183,7 +114,7 @@ const RegisterForm = () => {
             className="flex-1"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? <Spinner /> : "Submit Form"}
+            {form.formState.isSubmitting ? <Spinner /> : "Sign In"}
           </Button>
 
           <Button
@@ -202,4 +133,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

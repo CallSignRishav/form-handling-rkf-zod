@@ -2,7 +2,8 @@
 
 import { LogIn, MessageSquare, UserRoundPlus } from "lucide-react";
 
-import FormPlaceholder from "@/components/FormPlaceholder";
+import ContactForm from "@/components/ContactForm";
+import LoginForm from "@/components/LoginForm";
 import RegisterForm from "@/components/RegisterForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -50,10 +51,7 @@ const FormsTabs = () => {
           </p>
         </div>
 
-        <FormPlaceholder
-          icon={LogIn}
-          description="The login form will live here, wired with React Hook Form and Zod."
-        />
+        <LoginForm />
       </TabsContent>
 
       {/* Contact form */}
@@ -65,10 +63,7 @@ const FormsTabs = () => {
           </p>
         </div>
 
-        <FormPlaceholder
-          icon={MessageSquare}
-          description="The contact form will live here, wired with React Hook Form and Zod."
-        />
+        <ContactForm />
       </TabsContent>
     </Tabs>
   );
